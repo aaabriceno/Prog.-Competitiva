@@ -1,7 +1,7 @@
 #include <iostream>
 using namespace std;
 
-void bafana_passing(int T) {
+void bafana_bafana(int T) {
     for (int t = 1; t <= T; t++) {
         int N, K, P;
         cin >> N >> K >> P;
@@ -13,6 +13,6 @@ void bafana_passing(int T) {
 int main() {
     int T;
     cin >> T; // Número de casos de prueba
-    bafana_passing(T);
+    bafana_bafana(T);
     return 0;
 }
