@@ -7,78 +7,78 @@
 
 using namespace std;
 
-struct Team {
-    int teamNumber;
-    int solved[12];
-    int penalty[12];
-    bool submit;
+struct Equipo {
+    int numeroEquipo;
+    int resueltos[12];
+    int penalidad[12];
+    bool enviado;
 
-    Team(int i = 0) {
-        teamNumber = i;
-        fill(solved, solved + 12, 0);
-        fill(penalty, penalty + 12, 0);
-        submit = false;
+    Equipo(int i = 0) {
+        numeroEquipo = i;
+        fill(resueltos, resueltos + 12, 0);
+        fill(penalidad, penalidad + 12, 0);
+        enviado = false;
     }
 };
 
-bool cmp(const Team& a, const Team& b) {
-    if (a.solved[10] != b.solved[10])
-        return a.solved[10] > b.solved[10];
-    if (a.penalty[10] != b.penalty[10])
-        return a.penalty[10] < b.penalty[10];
-    return a.teamNumber < b.teamNumber;
+bool cmp(const Equipo& a, const Equipo& b) {
+    if (a.resueltos[10] != b.resueltos[10])
+        return a.resueltos[10] > b.resueltos[10];
+    if (a.penalidad[10] != b.penalidad[10])
+        return a.penalidad[10] < b.penalidad[10];
+    return a.numeroEquipo < b.numeroEquipo;
 }
 
 int main() {
-    int testCase;
-    string line;
+    int casosPrueba;
+    string linea;
 
-    cin >> testCase;
+    cin >> casosPrueba;
     cin.ignore(); 
-    getline(cin, line);
+    getline(cin, linea);
 
-    bool blank = false;
+    bool espacioVacio = false;
 
-    while (testCase--) {
-        vector<Team> teams;
-        for (int i = 0; i < 105; i++) teams.push_back(Team(i));
+    while (casosPrueba--) {
+        vector<Equipo> equipos;
+        for (int i = 0; i < 105; i++) equipos.push_back(Equipo(i));
 
-        while (getline(cin, line)) {
-            if (line.empty()) break;
+        while (getline(cin, linea)) {
+            if (linea.empty()) break;
 
-            int c, p, t;
-            char l;
-            sscanf(line.c_str(), "%d %d %d %c", &c, &p, &t, &l);
+            int equipo, problema, tiempo;
+            char estado;
+            sscanf(linea.c_str(), "%d %d %d %c", &equipo, &problema, &tiempo, &estado);
 
-            teams[c].submit = true;
+            equipos[equipo].enviado = true;
 
-            if (l == 'C') {
-                if (!teams[c].solved[p]) {
-                    teams[c].solved[p] = 1;
-                    teams[c].penalty[p] += t;
+            if (estado == 'C') {
+                if (!equipos[equipo].resueltos[problema]) {
+                    equipos[equipo].resueltos[problema] = 1;
+                    equipos[equipo].penalidad[problema] += tiempo;
                 }
-            } else if (l == 'I') {
-                if (!teams[c].solved[p]) {
-                    teams[c].penalty[p] += 20;
+            } else if (estado == 'I') {
+                if (!equipos[equipo].resueltos[problema]) {
+                    equipos[equipo].penalidad[problema] += 20;
                 }
             }
-            // 'R', 'U', 'E' are ignored
+            // 'R', 'U', 'E' son ignorados
         }
-        // Final calculation
+        // Cálculo final
         for (int i = 1; i < 105; i++) {
             for (int j = 1; j <= 9; j++) {
-                if (teams[i].solved[j]) {
-                    teams[i].solved[10]++;
-                    teams[i].penalty[10] += teams[i].penalty[j];
+                if (equipos[i].resueltos[j]) {
+                    equipos[i].resueltos[10]++;
+                    equipos[i].penalidad[10] += equipos[i].penalidad[j];
                 }
             }
         }
-        sort(teams.begin(), teams.end(), cmp);
-        if (blank) cout << endl;
-        blank = true;
-        for (auto& t : teams) {
-            if (t.submit) {
-                cout << t.teamNumber << " " << t.solved[10] << " " << t.penalty[10] << endl;
+        sort(equipos.begin(), equipos.end(), cmp);
+        if (espacioVacio) cout << endl;
+        espacioVacio = true;
+        for (auto& e : equipos) {
+            if (e.enviado) {
+                cout << e.numeroEquipo << " " << e.resueltos[10] << " " << e.penalidad[10] << endl;
             }
         }
     }
